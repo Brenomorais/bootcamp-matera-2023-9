@@ -1,4 +1,4 @@
-package br.com.bootcamp.revisao;
+package br.com.bootcamp.revisao.basic;
 
 public class UsandoWhile {
     public static void main(String[] args) {
