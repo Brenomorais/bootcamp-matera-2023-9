@@ -4,12 +4,7 @@ import com.matera.bootcamp.model.Conta;
 import com.matera.bootcamp.service.ContaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
@@ -71,15 +66,45 @@ public class ContaController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Conta> buscaPorId(@PathVariable Long id){
-        List<Conta> contas = contaService.getContas();
-        Optional<Conta> contaOptional = contas.stream()
-                .filter(conta -> conta.getId().equals(id))
-                .findFirst();
+        Optional<Conta> contaOptional = contaService.buscaPorId(id);
         if(contaOptional.isPresent()){
             Conta  conta = contaOptional.get();
-            return ResponseEntity.ok(conta);
+            return ResponseEntity.ok(conta); // 200 ok
         }else{
-            return  ResponseEntity.notFound().build(); //http 404
+            return  ResponseEntity.notFound().build(); // 404 not found
+        }
+    }
+
+    /**
+     * Delete: Remove uma conta cadastrada
+     * http://localhost:8080/contas/1
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarConta(@PathVariable Long id){
+        try{
+            contaService.deletarConta(id);
+            return ResponseEntity.noContent().build(); // 204 no content
+        }catch (Exception e){
+            return  ResponseEntity.notFound().build(); // nao achou 404 not found
+        }
+    }
+
+    /**
+     * PUT (atualiza de maneira integral): atualiza conta cadastrada
+     * PATH: atualiza de maneira parcial entidade
+     * http://localhost:8080/contas/1
+     * @param id
+     * @param contaAtualizada
+     * @return
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<Conta> autalizarConta(@PathVariable Long id, @RequestBody  Conta contaAtualizada){
+        try{
+            return ResponseEntity.ok(contaService.atualizarConta(id, contaAtualizada));
+        }catch (Exception e){
+            return  ResponseEntity.notFound().build(); // nao achou 404 not found
         }
     }
 
