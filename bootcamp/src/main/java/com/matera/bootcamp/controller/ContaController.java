@@ -55,7 +55,7 @@ public class ContaController {
      */
     @PostMapping
     public ResponseEntity<Conta> novaConta(@RequestBody Conta conta){
-        return  ResponseEntity.ok(contaService.criar(conta)); //http 200
+        return  ResponseEntity.ok(contaService.criarOuAutalizar(conta)); //http 200
     }
 
     /**
@@ -100,11 +100,14 @@ public class ContaController {
      * @return
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Conta> autalizarConta(@PathVariable Long id, @RequestBody  Conta contaAtualizada){
-        try{
-            return ResponseEntity.ok(contaService.atualizarConta(id, contaAtualizada));
-        }catch (Exception e){
-            return  ResponseEntity.notFound().build(); // nao achou 404 not found
+    public ResponseEntity<Conta> autalizarConta(@PathVariable Long id, @RequestBody  Conta contaAtualizada) {
+        Optional<Conta> contaOptional = contaService.buscaPorId(id);
+        if (contaOptional.isPresent()) {
+            contaAtualizada.setId(id);
+            contaService.criarOuAutalizar(contaAtualizada);
+            return ResponseEntity.ok(contaAtualizada);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 

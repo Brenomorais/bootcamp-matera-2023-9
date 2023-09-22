@@ -2,27 +2,24 @@ package com.matera.bootcamp.service;
 
 import com.matera.bootcamp.model.Conta;
 import com.matera.bootcamp.repository.ContaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class ContaService {
 
-    @Autowired
-    private ContaRepository contaRepository;
-
-    private List<Conta> contas = new ArrayList<>();
-    private Long idCorrent = 1L;
+    private final ContaRepository contaRepository;
 
     public void informacoesConta(Conta conta) {
         System.out.println("conta");
     }
 
-    public Conta criar(Conta conta) {
+    public Conta criarOuAutalizar(Conta conta) {
         contaRepository.save(conta);
         return conta;
     }
