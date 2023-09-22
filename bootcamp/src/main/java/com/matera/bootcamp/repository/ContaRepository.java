@@ -19,9 +19,9 @@ public interface ContaRepository extends JpaRepository<Conta, Long> {
      */
     Conta agencia(String agencia);
 
-    Conta findByNumeroConta(String numeroConta);
-
     Conta findByAgencia(String agencia);
+
+    Conta findByNumeroConta(String numeroConta);
 
     /* query jpql */
     @Query("select c from Conta c order by c.numeroConta asc")
@@ -34,4 +34,6 @@ public interface ContaRepository extends JpaRepository<Conta, Long> {
     /* query nativa sql com parametro */
     @Query(value = "select * from CONTA c where c.agencia = ?1", nativeQuery = true)
     List<Conta> buscarContaPorAgenciaComQueryNativa(String agenciaComOutroNome);
+
+
 }

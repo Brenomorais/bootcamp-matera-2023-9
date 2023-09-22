@@ -1,8 +1,10 @@
 package com.matera.bootcamp.controller;
 
+import com.matera.bootcamp.exception.ContaInvalidaException;
 import com.matera.bootcamp.model.Conta;
 import com.matera.bootcamp.service.ContaService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,8 +56,9 @@ public class ContaController {
      * @return
      */
     @PostMapping
-    public ResponseEntity<Conta> novaConta(@RequestBody Conta conta){
-        return  ResponseEntity.ok(contaService.criarOuAutalizar(conta)); //http 200
+    public ResponseEntity<Conta> novaConta(@RequestBody Conta conta) throws ContaInvalidaException {
+        return ResponseEntity.status(HttpStatus.CREATED) // 201 created
+                .body(contaService.criarOuAutalizar(conta));
     }
 
     /**
@@ -82,12 +85,14 @@ public class ContaController {
      * @return
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarConta(@PathVariable Long id){
-        try{
-            contaService.deletarConta(id);
-            return ResponseEntity.noContent().build(); // 204 no content
-        }catch (Exception e){
-            return  ResponseEntity.notFound().build(); // nao achou 404 not found
+    public ResponseEntity<Void> deletarConta(@PathVariable Long id) throws ContaInvalidaException {
+        Optional<Conta> contaOptional = contaService.buscaPorId(id);
+        if (contaOptional.isPresent()) {
+            Conta conta = contaOptional.get();
+            contaService.delete(conta);
+            return ResponseEntity.noContent().build(); //204
+        } else {
+            return ResponseEntity.notFound().build(); //404
         }
     }
 
@@ -100,7 +105,7 @@ public class ContaController {
      * @return
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Conta> autalizarConta(@PathVariable Long id, @RequestBody  Conta contaAtualizada) {
+    public ResponseEntity<Conta> autalizar(@PathVariable Long id, @RequestBody  Conta contaAtualizada) throws ContaInvalidaException {
         Optional<Conta> contaOptional = contaService.buscaPorId(id);
         if (contaOptional.isPresent()) {
             contaAtualizada.setId(id);
