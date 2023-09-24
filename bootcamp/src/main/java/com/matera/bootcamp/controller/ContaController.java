@@ -1,43 +1,35 @@
 package com.matera.bootcamp.controller;
 
-import com.matera.bootcamp.exception.ContaInvalidaException;
-import com.matera.bootcamp.model.Conta;
-import com.matera.bootcamp.service.ContaService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.matera.bootcamp.exception.ContaInvalidaException;
+import com.matera.bootcamp.model.Conta;
+import com.matera.bootcamp.model.Titular;
+import com.matera.bootcamp.service.ContaService;
+import com.matera.bootcamp.service.TitularService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/contas")
 @RequiredArgsConstructor
 public class ContaController {
 
-    //Formas de injeção de dependencia com Spring:
-
-	/* 1ºAtributo: Diretamente no atributo da classe.
-	@Autowired
-	private ContaService contaService;
-	 */
-
-	/* 2º Construtor: Esta é a maneira recomendada pela maioria dos desenvolvedores e pelo próprio Spring
-	public ContaController(ContaService contaService){
-		this.contaService = conta;
-	}*/
-
-	/* 3º SetInjection: usando o Setter uma alternativa ao construtor é o uso de setters, menos preferida
-	private ContaService contaService;
-	@Autowired
-	public void setContaService(ContaService contaService) {
-        this.contaService = contaService;
-    }*/
-
-    //4º Maneira usando a anotacação @RequiredArgsConstructor na classe
-    private final ContaService contaService;
+    private final ContaService contaService;    
+    private final TitularService titularService;
 
     /**
      * GET: Retorna todas as contas
@@ -45,9 +37,19 @@ public class ContaController {
      */
     @GetMapping
     public List<Conta> teste(){
-        //Conta conta = Conta.builder().id(1L).agencia("123").numeroConta("123456789").build();
-        //contaService.criar(conta);
         return  contaService.getContas();
+    }
+    
+    @PostMapping("/lancamentos/{idConta}/debito/{valor}")
+    public ResponseEntity<Conta> debitar(@PathVariable Long  idConta, @PathVariable BigDecimal valor) throws ContaInvalidaException{
+    	Conta conta = contaService.debitarConta(idConta, valor);
+    	return ResponseEntity.status(HttpStatus.CREATED).body(conta);
+    }
+    
+    @PostMapping("/lancamentos/{idConta}/credito/{valor}")
+    public ResponseEntity<Conta> creditar(@PathVariable Long  idConta, @PathVariable BigDecimal valor) throws ContaInvalidaException{
+    	Conta conta = contaService.creditarConta(idConta, valor);
+    	return ResponseEntity.status(HttpStatus.CREATED).body(conta);
     }
 
     /**
@@ -57,6 +59,10 @@ public class ContaController {
      */
     @PostMapping
     public ResponseEntity<Conta> novaConta(@RequestBody Conta conta) throws ContaInvalidaException {
+    	Titular titular = conta.getTitular();
+    	Titular titularSalvo = titularService.criarOuAtualizar(titular);
+        conta.setTitular(titularSalvo);
+    	
         return ResponseEntity.status(HttpStatus.CREATED) // 201 created
                 .body(contaService.criarOuAutalizar(conta));
     }
