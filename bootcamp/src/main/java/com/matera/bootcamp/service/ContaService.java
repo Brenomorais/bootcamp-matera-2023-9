@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import com.matera.bootcamp.exception.ContaInvalidaException;
 import com.matera.bootcamp.model.Conta;
+import com.matera.bootcamp.model.dto.RequestPixDTO;
+import com.matera.bootcamp.model.dto.ResponsePixDTO;
 import com.matera.bootcamp.repository.ContaRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -41,7 +43,7 @@ public class ContaService {
         contaRepository.deleteById(id);
     }
 
-    public void delete(Conta conta) throws ContaInvalidaException{
+    public void delete(Conta conta){
         contaRepository.delete(conta);
     }
     
@@ -62,4 +64,18 @@ public class ContaService {
 		}
 		throw new ContaInvalidaException("Erro durante operação credito.");
 	}
+	
+	public ResponsePixDTO pix(RequestPixDTO pixDTO) {
+
+		Conta contaOrigem = contaRepository.findByTitularCpf(pixDTO.getChaveOrigem());
+
+		Conta contaDestino = contaRepository.findByTitularCpf(pixDTO.getChaveDestino());
+
+		contaOrigem.enviarPix(contaDestino, pixDTO.getValor());
+
+		contaRepository.saveAll(List.of(contaOrigem, contaDestino));
+
+		return new ResponsePixDTO(contaOrigem.getSaldo(), contaDestino.getSaldo());
+	}
+	
 }

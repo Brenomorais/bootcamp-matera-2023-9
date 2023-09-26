@@ -2,12 +2,13 @@ package com.matera.bootcamp.model;
 
 import java.math.BigDecimal;
 
+import com.matera.bootcamp.exception.ContaSemSaldoException;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
 
@@ -29,7 +30,6 @@ public class Conta {
     private BigDecimal saldo = BigDecimal.ZERO;
 
     @OneToOne
-    @JoinColumn(name = "titular_id")
     private Titular titular;
    
     public Conta(){
@@ -50,4 +50,14 @@ public class Conta {
     public void credito(BigDecimal valor){
         saldo = saldo.add(valor);
     }
+
+	public void enviarPix(Conta contaDestino, BigDecimal valor) {
+		if(this.saldo.compareTo(valor) <= 0) {
+			throw new ContaSemSaldoException("Conta sem saldo disponível.");
+		}
+		//faz o debito na contaOrigem
+		this.debito(valor);
+		//faz o credito na contaDestino
+		contaDestino.credito(valor);
+	}
 }

@@ -1,6 +1,7 @@
 package com.matera.bootcamp.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.matera.bootcamp.exception.ContaInvalidaException;
+import com.matera.bootcamp.exception.ContaSemSaldoException;
 import com.matera.bootcamp.model.Conta;
 import com.matera.bootcamp.model.Titular;
+import com.matera.bootcamp.model.dto.RequestPixDTO;
+import com.matera.bootcamp.model.dto.ResponsePixDTO;
 import com.matera.bootcamp.service.ContaService;
 import com.matera.bootcamp.service.TitularService;
 
@@ -38,6 +42,19 @@ public class ContaController {
     @GetMapping
     public List<Conta> teste(){
         return  contaService.getContas();
+    }
+    
+    /**
+     * POST: Realiza um PIX
+     * URL: http://localhost:8080/contas/lancamentos/pix
+     * @param pixDTO
+     * @return
+     * @throws ContaInvalidaException 
+     */
+    @PostMapping("/lancamentos/pix")
+    public ResponseEntity<ResponsePixDTO> pix(@RequestBody RequestPixDTO pixDTO) throws ContaSemSaldoException{
+    	ResponsePixDTO responsePixDTO = contaService.pix(pixDTO);
+    	return ResponseEntity.status(HttpStatus.OK).body(responsePixDTO);
     }
     
     @PostMapping("/lancamentos/{idConta}/debito/{valor}")
@@ -120,6 +137,45 @@ public class ContaController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    
+    /**
+     * URL: http://localhost:8080/contas/criarConta
+     * @return
+     * @throws ContaInvalidaException
+     */
+    @GetMapping("/criarConta")
+    public ResponseEntity<List<Conta>> criaContas() throws ContaInvalidaException {
+    	
+    	List<Conta> contas = new ArrayList<>();
+    	
+    	Conta contaOrigem = new Conta();
+    	contaOrigem.setNumeroConta("001");
+    	contaOrigem.setAgencia("0141");
+    	Titular titular1 = new Titular();
+    	titular1.setCpf("50285673017");
+    	titular1.setNome("breno");
+    	
+    	
+    	titular1 = titularService.criarOuAtualizar(titular1);
+    	contaOrigem.setTitular(titular1);
+    	contas.add(contaService.criarOuAutalizar(contaOrigem));     
+    	
+    	Conta contaDestino = new Conta();
+    	contaDestino.setNumeroConta("002");
+    	contaDestino.setAgencia("0141");
+    	Titular titular2 = new Titular();
+    	titular2.setCpf("43554754099");
+    	titular2.setNome("magda");
+    	contaDestino.setTitular(titular2);
+    	
+    	titular2 = titularService.criarOuAtualizar(titular2);
+    	contaDestino.setTitular(titular2);
+    	contas.add(contaService.criarOuAutalizar(contaDestino));
+    	
+    	    	
+        return ResponseEntity.status(HttpStatus.CREATED) // 201 created
+                .body(contas);
     }
 
 }

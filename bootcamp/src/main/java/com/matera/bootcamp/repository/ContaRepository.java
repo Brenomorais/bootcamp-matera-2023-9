@@ -35,5 +35,7 @@ public interface ContaRepository extends JpaRepository<Conta, Long> {
     @Query(value = "select * from CONTA c where c.agencia = ?1", nativeQuery = true)
     List<Conta> buscarContaPorAgenciaComQueryNativa(String agenciaComOutroNome);
 
+    //Busca chave cpf no titular da conta
+	Conta findByTitularCpf(String  cpf);
 
 }

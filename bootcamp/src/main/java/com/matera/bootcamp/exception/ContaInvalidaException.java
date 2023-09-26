@@ -1,7 +1,8 @@
 package com.matera.bootcamp.exception;
 
-public class ContaInvalidaException extends Exception{
-    public ContaInvalidaException(String message){
+public class ContaInvalidaException extends RuntimeException {
+    
+	public ContaInvalidaException(String message){
         super(message);
     }
 }
