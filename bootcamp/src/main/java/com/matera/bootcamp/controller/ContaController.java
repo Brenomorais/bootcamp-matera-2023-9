@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -149,33 +150,24 @@ public class ContaController {
     	
     	List<Conta> contas = new ArrayList<>();
     	
-    	Conta contaOrigem = new Conta();
-    	contaOrigem.setNumeroConta("001");
-    	contaOrigem.setAgencia("0141");
-    	Titular titular1 = new Titular();
-    	titular1.setCpf("50285673017");
-    	titular1.setNome("breno");
-    	
-    	
-    	titular1 = titularService.criarOuAtualizar(titular1);
-    	contaOrigem.setTitular(titular1);
-    	contas.add(contaService.criarOuAutalizar(contaOrigem));     
-    	
-    	Conta contaDestino = new Conta();
-    	contaDestino.setNumeroConta("002");
-    	contaDestino.setAgencia("0141");
-    	Titular titular2 = new Titular();
-    	titular2.setCpf("43554754099");
-    	titular2.setNome("magda");
-    	contaDestino.setTitular(titular2);
-    	
-    	titular2 = titularService.criarOuAtualizar(titular2);
-    	contaDestino.setTitular(titular2);
-    	contas.add(contaService.criarOuAutalizar(contaDestino));
-    	
-    	    	
+		for (int i = 1; i <= 2; i++) {
+			Conta conta = new Conta();			
+			conta.setNumeroConta("00" + getNumeroAleatorio());
+			conta.setAgencia("0141");
+			Titular titular = new Titular();
+			titular.setCpf("111111111" + getNumeroAleatorio());
+			titular.setNome("User"+i);
+			
+			titular = titularService.criarOuAtualizar(titular);
+	    	conta.setTitular(titular);
+	    	contas.add(contaService.criarOuAutalizar(conta));
+		}    	    	
         return ResponseEntity.status(HttpStatus.CREATED) // 201 created
                 .body(contas);
+    }
+    
+    public int getNumeroAleatorio() {
+    	return new Random().nextInt((999 - 1) + 1) + 1;
     }
 
 }

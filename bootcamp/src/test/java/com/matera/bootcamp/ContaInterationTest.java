@@ -52,7 +52,8 @@ public class ContaInterationTest {
 	void deveRetornarNotFoundQuandoContaNaoExiste() {
 		
 		RestAssured
-		.given()		
+		.given()
+		.log().all()
 		.when()
 		.get("/contas/{id}", 9L)
 		.then()
@@ -70,7 +71,7 @@ public class ContaInterationTest {
 		contaRepository.save(contaRequest);
 		
 		Conta contaReponse = RestAssured
-			.given()		
+			.given().log().all()		
 			.when()
 			.get("/contas/{id}", contaRequest.getId())
 			.then()
@@ -79,6 +80,52 @@ public class ContaInterationTest {
 				
 		Assertions.assertEquals(contaRequest.getId(), contaReponse.getId());
 	}
+	
+	
+	@Test
+	public void deveRetornarOKCriarUmaConta() {
+	
+		 String requestConta = "{       \r\n"
+		 		+ "    \"numeroConta\": \"999\",\r\n"
+		 		+ "    \"agencia\": \"123\",\r\n"
+		 		+ "    \"titular\":{\r\n"
+		 		+ "       \"nome\": \"user\",\r\n"
+		 		+ "       \"cpf\": \"99999999999\"\r\n"
+		 		+ "    }\r\n"
+		 		+ "}";
+		 
+		 RestAssured.given()	
+		 	.log().all()
+            .contentType(ContentType.JSON)
+            .body(requestConta)
+        .when()
+            .post("/contas")
+        .then()
+        	.statusCode(HttpStatus.CREATED.value())
+        	.extract();    			
+	}
+	
+	
+	@Test
+	void deveRetornarOkCriarContasTestes() {
+		
+		List<Conta> contasReponse = RestAssured
+				.given()
+                .when()
+                .get("/contas/criarConta")
+                .then()
+                .statusCode(HttpStatus.CREATED.value())
+                .extract().jsonPath().getList(".", Conta.class);
+		
+		if (contasReponse.size() == 2) {
+			Conta origem = contasReponse.get(0);
+			Conta destino = contasReponse.get(1);		
+			
+			Assertions.assertNotNull(origem);
+			Assertions.assertNotNull(destino);
+		}			
+	};
+	
 	
 	@Test
 	void deveRetonarErroDeSaldoInsuficiente() {
@@ -99,7 +146,8 @@ public class ContaInterationTest {
 			 pix.put("chaveDestino", destino.getTitular().getCpf());
 			 pix.put("valor", 1000);
 			 
-			 RestAssured.given()	     
+			 RestAssured.given()	
+			 	.log().all()
 	            .contentType(ContentType.JSON)
 	            .body(pix)
 	        .when()
@@ -114,7 +162,8 @@ public class ContaInterationTest {
 	@Test
 	void deveRealizarOKQuandoRealizarPixComSucesso() {
 		
-		JsonPath path = RestAssured.given()
+		JsonPath path = RestAssured
+				.given().log().all()
                 .header("Accept", "application/json")
                 .get("/contas/criarConta")
                 .andReturn().jsonPath();
@@ -128,9 +177,11 @@ public class ContaInterationTest {
 			//esse saldo só e visiel nesse escopo do teste
 			origem.setSaldo(new BigDecimal(1000));
 			
-			 RestAssured.given()	     
-			 	.pathParam("idConta", "1")
+			 RestAssured.given()
+			 	.log().all()
+			 	.pathParam("idConta", origem.getId())
 				.pathParam("valor", "1000")
+				.accept(ContentType.JSON)
 			 .when()
 			    .post("/contas/lancamentos/{idConta}/credito/{valor}")
 			 .then()
@@ -143,7 +194,8 @@ public class ContaInterationTest {
 			 BigDecimal valorPix = new BigDecimal(200);
 			 pix.put("valor", valorPix);
 			 
-			 ResponsePixDTO responsePixDTO = RestAssured.given()	     
+			 ResponsePixDTO responsePixDTO = RestAssured
+				.given().log().all()	     
 	            .contentType(ContentType.JSON)
 	            .body(pix)
 	        .when()
@@ -151,6 +203,8 @@ public class ContaInterationTest {
 	        .then()
 	        	.statusCode(HttpStatus.OK.value())
 	        	.extract().jsonPath().getObject("", ResponsePixDTO.class);		
+			 
+			 Assertions.assertNotNull(responsePixDTO);
 			
 		}
 		
