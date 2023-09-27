@@ -1,10 +1,10 @@
-package com.breno.materabootcamp;
+package com.breno.materabootcamp.banco;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BootcampApplicationTests {
+class BancoApplicationTests {
 
 	@Test
 	void contextLoads() {

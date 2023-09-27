@@ -1,4 +1,4 @@
-package com.breno.materabootcamp.exception;
+package com.breno.materabootcamp.banco.exception;
 
 public class ContaInvalidaException extends RuntimeException {
     

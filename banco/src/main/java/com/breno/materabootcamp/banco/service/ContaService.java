@@ -1,4 +1,4 @@
-package com.breno.materabootcamp.service;
+package com.breno.materabootcamp.banco.service;
 
 import static java.util.Objects.isNull;
 
@@ -6,13 +6,13 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import com.breno.materabootcamp.model.dto.RequestPixDTO;
-import com.breno.materabootcamp.model.dto.ResponsePixDTO;
-import com.breno.materabootcamp.repository.ContaRepository;
+import com.breno.materabootcamp.banco.model.Conta;
+import com.breno.materabootcamp.banco.model.dto.RequestPixDTO;
+import com.breno.materabootcamp.banco.model.dto.ResponsePixDTO;
+import com.breno.materabootcamp.banco.repository.ContaRepository;
 import org.springframework.stereotype.Service;
 
-import com.breno.materabootcamp.exception.ContaInvalidaException;
-import com.breno.materabootcamp.model.Conta;
+import com.breno.materabootcamp.banco.exception.ContaInvalidaException;
 
 import lombok.RequiredArgsConstructor;
 

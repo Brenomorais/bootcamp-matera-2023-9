@@ -1,11 +1,12 @@
-package com.breno.materabootcamp;
+package com.breno.materabootcamp.banco;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.breno.materabootcamp.model.dto.ResponsePixDTO;
+import com.breno.materabootcamp.banco.model.Conta;
+import com.breno.materabootcamp.banco.model.dto.ResponsePixDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 
-import com.breno.materabootcamp.model.Conta;
-import com.breno.materabootcamp.repository.ContaRepository;
+import com.breno.materabootcamp.banco.repository.ContaRepository;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;

@@ -1,6 +1,6 @@
-package com.breno.materabootcamp.repository;
+package com.breno.materabootcamp.banco.repository;
 
-import com.breno.materabootcamp.model.Conta;
+import com.breno.materabootcamp.banco.model.Conta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

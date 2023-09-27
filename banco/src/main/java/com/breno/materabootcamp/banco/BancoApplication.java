@@ -1,13 +1,13 @@
-package com.breno.materabootcamp;
+package com.breno.materabootcamp.banco;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BootcampApplication {
+public class BancoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BootcampApplication.class, args);
+		SpringApplication.run(BancoApplication.class, args);
 	}
 
 }

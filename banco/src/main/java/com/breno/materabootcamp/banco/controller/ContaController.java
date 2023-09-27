@@ -1,4 +1,4 @@
-package com.breno.materabootcamp.controller;
+package com.breno.materabootcamp.banco.controller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import com.breno.materabootcamp.exception.ContaSemSaldoException;
-import com.breno.materabootcamp.model.dto.RequestPixDTO;
-import com.breno.materabootcamp.model.dto.ResponsePixDTO;
+import com.breno.materabootcamp.banco.exception.ContaSemSaldoException;
+import com.breno.materabootcamp.banco.model.Conta;
+import com.breno.materabootcamp.banco.model.Titular;
+import com.breno.materabootcamp.banco.model.dto.RequestPixDTO;
+import com.breno.materabootcamp.banco.model.dto.ResponsePixDTO;
+import com.breno.materabootcamp.banco.service.ContaService;
+import com.breno.materabootcamp.banco.service.TitularService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,11 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.breno.materabootcamp.exception.ContaInvalidaException;
-import com.breno.materabootcamp.model.Conta;
-import com.breno.materabootcamp.model.Titular;
-import com.breno.materabootcamp.service.ContaService;
-import com.breno.materabootcamp.service.TitularService;
+import com.breno.materabootcamp.banco.exception.ContaInvalidaException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ContaController {
 
-    private final ContaService contaService;    
+    private final ContaService contaService;
     private final TitularService titularService;
 
     /**

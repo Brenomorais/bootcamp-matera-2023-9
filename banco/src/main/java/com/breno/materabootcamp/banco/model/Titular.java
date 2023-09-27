@@ -1,4 +1,4 @@
-package com.breno.materabootcamp.model;
+package com.breno.materabootcamp.banco.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

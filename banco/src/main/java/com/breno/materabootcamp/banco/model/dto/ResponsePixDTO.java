@@ -1,4 +1,4 @@
-package com.breno.materabootcamp.model.dto;
+package com.breno.materabootcamp.banco.model.dto;
 
 import java.math.BigDecimal;
 import java.util.UUID;

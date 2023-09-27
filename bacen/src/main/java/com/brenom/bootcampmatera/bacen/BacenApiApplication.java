@@ -1,4 +1,4 @@
-package com.brenom.bootcampmatera;
+package com.brenom.bootcampmatera.bacen;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

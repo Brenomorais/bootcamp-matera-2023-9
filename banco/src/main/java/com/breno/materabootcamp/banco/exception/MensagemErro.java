@@ -1,4 +1,4 @@
-package com.breno.materabootcamp.exception;
+package com.breno.materabootcamp.banco.exception;
 
 import lombok.Data;
 

@@ -1,9 +1,8 @@
-package com.breno.materabootcamp.service;
+package com.breno.materabootcamp.banco.service;
 
-import com.breno.materabootcamp.repository.TitularRepository;
+import com.breno.materabootcamp.banco.model.Titular;
+import com.breno.materabootcamp.banco.repository.TitularRepository;
 import org.springframework.stereotype.Service;
-
-import com.breno.materabootcamp.model.Titular;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,8 +1,8 @@
-package com.breno.materabootcamp.model;
+package com.breno.materabootcamp.banco.model;
 
 import java.math.BigDecimal;
 
-import com.breno.materabootcamp.exception.ContaSemSaldoException;
+import com.breno.materabootcamp.banco.exception.ContaSemSaldoException;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

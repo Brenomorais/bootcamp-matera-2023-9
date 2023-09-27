@@ -11,7 +11,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>com.brenom.bootcampmatera</groupId>
+	<groupId>com.brenom.bootcampmatera.banco</groupId>
 	<artifactId>banco-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>${project.artifactId}</name>
