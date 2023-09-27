@@ -6,13 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import com.breno.materabootcamp.banco.exception.ContaSemSaldoException;
-import com.breno.materabootcamp.banco.model.Conta;
-import com.breno.materabootcamp.banco.model.Titular;
-import com.breno.materabootcamp.banco.model.dto.RequestPixDTO;
-import com.breno.materabootcamp.banco.model.dto.ResponsePixDTO;
-import com.breno.materabootcamp.banco.service.ContaService;
-import com.breno.materabootcamp.banco.service.TitularService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +17,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.breno.materabootcamp.banco.client.BacenClient;
 import com.breno.materabootcamp.banco.exception.ContaInvalidaException;
+import com.breno.materabootcamp.banco.exception.ContaSemSaldoException;
+import com.breno.materabootcamp.banco.model.Conta;
+import com.breno.materabootcamp.banco.model.Titular;
+import com.breno.materabootcamp.banco.model.dto.ContaDTO;
+import com.breno.materabootcamp.banco.model.dto.RequestPixDTO;
+import com.breno.materabootcamp.banco.model.dto.ResponsePixDTO;
+import com.breno.materabootcamp.banco.service.ContaService;
+import com.breno.materabootcamp.banco.service.TitularService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +37,7 @@ public class ContaController {
 
     private final ContaService contaService;
     private final TitularService titularService;
+    private final BacenClient bacenClient;
 
     /**
      * GET: Retorna todas as contas
@@ -78,7 +81,22 @@ public class ContaController {
     @PostMapping
     public ResponseEntity<Conta> novaConta(@RequestBody Conta conta) throws ContaInvalidaException {
     	Titular titular = conta.getTitular();
-    	Titular titularSalvo = titularService.criarOuAtualizar(titular);
+    	
+    	Titular titularSalvo = titularService.criarOuAtualizar(titular); //TODO: dualwrite?
+    	
+        //TODO : extrair codigo para um serviço    	
+    	
+    	//Usando construtor do lombok
+    	ContaDTO contaDTO = ContaDTO.builder()
+    			.numeroConta(conta.getNumeroConta())
+    			.agencia(conta.getAgencia())
+    			.chavePix(titularSalvo.getCpf())
+    			.build();
+    		
+    	
+    	bacenClient.criarConta(contaDTO);
+
+    	
         conta.setTitular(titularSalvo);
     	
         return ResponseEntity.status(HttpStatus.CREATED) // 201 created

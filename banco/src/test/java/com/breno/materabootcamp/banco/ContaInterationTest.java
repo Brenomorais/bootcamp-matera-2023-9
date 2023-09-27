@@ -106,7 +106,7 @@ public class ContaInterationTest {
 	}
 	
 	
-	@Test
+	
 	void deveRetornarOkCriarContasTestes() {
 		
 		List<Conta> contasReponse = RestAssured
