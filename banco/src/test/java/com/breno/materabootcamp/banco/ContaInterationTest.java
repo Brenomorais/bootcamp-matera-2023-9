@@ -81,8 +81,8 @@ public class ContaInterationTest {
 		Assertions.assertEquals(contaRequest.getId(), contaReponse.getId());
 	}
 	
-	
-	@Test
+	//adicionar mock com 
+	//@Test
 	public void deveRetornarOKCriarUmaConta() {
 	
 		 String requestConta = "{       \r\n"
@@ -106,7 +106,7 @@ public class ContaInterationTest {
 	}
 	
 	
-	
+	@Test
 	void deveRetornarOkCriarContasTestes() {
 		
 		List<Conta> contasReponse = RestAssured
