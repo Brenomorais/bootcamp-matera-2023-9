@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ContaRepository extends JpaRepository<Conta, Long> {
 
@@ -38,4 +39,6 @@ public interface ContaRepository extends JpaRepository<Conta, Long> {
     //Busca chave cpf no titular da conta
 	Conta findByTitularCpf(String  cpf);
 
+	@Query("select c from Conta c inner join c.titular t where t.cpf = :chavePix")
+	Optional<Conta> buscaChavePix(String chavePix);
 }

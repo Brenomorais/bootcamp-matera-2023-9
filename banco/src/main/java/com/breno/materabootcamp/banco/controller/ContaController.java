@@ -23,6 +23,8 @@ import com.breno.materabootcamp.banco.exception.ContaSemSaldoException;
 import com.breno.materabootcamp.banco.model.Conta;
 import com.breno.materabootcamp.banco.model.Titular;
 import com.breno.materabootcamp.banco.model.dto.ContaDTO;
+import com.breno.materabootcamp.banco.model.dto.PesponsePixLinkPagamentoDTO;
+import com.breno.materabootcamp.banco.model.dto.RequestPixLinkPagamentoDTO;
 import com.breno.materabootcamp.banco.model.dto.RequestPixDTO;
 import com.breno.materabootcamp.banco.model.dto.ResponsePixDTO;
 import com.breno.materabootcamp.banco.service.ContaService;
@@ -61,6 +63,13 @@ public class ContaController {
     	return ResponseEntity.status(HttpStatus.OK).body(responsePixDTO);
     }
     
+    @GetMapping("/lancamentos/pix/{chavePix}/{valor}")
+    public ResponseEntity<PesponsePixLinkPagamentoDTO> pixPagamento(@PathVariable String chavePix, @PathVariable BigDecimal valor) throws ContaInvalidaException {
+    	RequestPixLinkPagamentoDTO requestlinkPixPagamentoDTO = new RequestPixLinkPagamentoDTO(chavePix, valor);
+    	PesponsePixLinkPagamentoDTO responselinkPixDTO = contaService.gerarLinkPagamento(requestlinkPixPagamentoDTO);
+    	return ResponseEntity.status(HttpStatus.OK).body(responselinkPixDTO);
+    }
+    
     @PostMapping("/lancamentos/{idConta}/debito/{valor}")
     public ResponseEntity<Conta> debitar(@PathVariable Long  idConta, @PathVariable BigDecimal valor) throws ContaInvalidaException{
     	Conta conta = contaService.debitarConta(idConta, valor);
@@ -95,7 +104,6 @@ public class ContaController {
     		
     	
     	bacenClient.criarConta(contaDTO);
-
     	
         conta.setTitular(titularSalvo);
     	

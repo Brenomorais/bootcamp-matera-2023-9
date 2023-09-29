@@ -5,8 +5,11 @@ import static java.util.Objects.isNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.breno.materabootcamp.banco.model.Conta;
+import com.breno.materabootcamp.banco.model.dto.RequestPixLinkPagamentoDTO;
+import com.breno.materabootcamp.banco.model.dto.PesponsePixLinkPagamentoDTO;
 import com.breno.materabootcamp.banco.model.dto.RequestPixDTO;
 import com.breno.materabootcamp.banco.model.dto.ResponsePixDTO;
 import com.breno.materabootcamp.banco.repository.ContaRepository;
@@ -76,6 +79,29 @@ public class ContaService {
 		contaRepository.saveAll(List.of(contaOrigem, contaDestino));
 
 		return new ResponsePixDTO(contaOrigem.getSaldo(), contaDestino.getSaldo());
+	}
+	
+	public Optional<Conta> getChavePix(String chavePix) {		
+		 return  contaRepository.buscaChavePix(chavePix);
+	}
+	
+	public PesponsePixLinkPagamentoDTO gerarLinkPagamento(RequestPixLinkPagamentoDTO pixPagamento) throws ContaInvalidaException{
+		 Optional<Conta> conta =  getChavePix(pixPagamento.getChavePix());
+		 
+		 if(!conta.isPresent()) {	
+			 throw new ContaInvalidaException("Chave Pix não encontrada.");			
+		 }
+		 
+		 StringBuilder linkPagamento = new StringBuilder();
+		 
+		 linkPagamento.append(pixPagamento.getChavePix());
+		 linkPagamento.append(";");
+		 linkPagamento.append(pixPagamento.getValor());
+		 linkPagamento.append(";");
+		 linkPagamento.append("qrcode.pix/");
+		 linkPagamento.append(UUID.randomUUID());	 
+		 		 
+		 return new PesponsePixLinkPagamentoDTO(linkPagamento.toString());
 	}
 	
 }
