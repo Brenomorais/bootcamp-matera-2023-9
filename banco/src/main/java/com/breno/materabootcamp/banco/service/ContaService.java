@@ -10,6 +10,7 @@ import java.util.UUID;
 import com.breno.materabootcamp.banco.model.Conta;
 import com.breno.materabootcamp.banco.model.dto.RequestPixLinkPagamentoDTO;
 import com.breno.materabootcamp.banco.model.dto.PesponsePixLinkPagamentoDTO;
+import com.breno.materabootcamp.banco.model.dto.RequenstPagarPixLinkDTO;
 import com.breno.materabootcamp.banco.model.dto.RequestPixDTO;
 import com.breno.materabootcamp.banco.model.dto.ResponsePixDTO;
 import com.breno.materabootcamp.banco.repository.ContaRepository;
@@ -85,6 +86,7 @@ public class ContaService {
 		 return  contaRepository.buscaChavePix(chavePix);
 	}
 	
+	// Gera link de pagamento no formato: chavePix;valor;qrcode.pix/uuid"
 	public PesponsePixLinkPagamentoDTO gerarLinkPagamento(RequestPixLinkPagamentoDTO pixPagamento) throws ContaInvalidaException{
 		 Optional<Conta> conta =  getChavePix(pixPagamento.getChavePix());
 		 
@@ -102,6 +104,22 @@ public class ContaService {
 		 linkPagamento.append(UUID.randomUUID());	 
 		 		 
 		 return new PesponsePixLinkPagamentoDTO(linkPagamento.toString());
+	}
+	
+	public ResponsePixDTO pagarLinkPagamento(RequenstPagarPixLinkDTO pagarPixLink) {			
+		
+		String[] linkSplitted = pagarPixLink.getLinkPagamento().split(";");
+		
+		String chaveDestino = linkSplitted[0];
+		BigDecimal valor = new BigDecimal(linkSplitted[1]);
+				
+		
+		RequestPixDTO dataPix = RequestPixDTO.builder()
+				.chaveOrigem(pagarPixLink.getChaveOrigem())
+				.chaveDestino(chaveDestino)
+				.valor(valor).build();
+		
+		return pix(dataPix);		
 	}
 	
 }

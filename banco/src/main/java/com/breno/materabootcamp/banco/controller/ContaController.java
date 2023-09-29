@@ -24,6 +24,7 @@ import com.breno.materabootcamp.banco.model.Conta;
 import com.breno.materabootcamp.banco.model.Titular;
 import com.breno.materabootcamp.banco.model.dto.ContaDTO;
 import com.breno.materabootcamp.banco.model.dto.PesponsePixLinkPagamentoDTO;
+import com.breno.materabootcamp.banco.model.dto.RequenstPagarPixLinkDTO;
 import com.breno.materabootcamp.banco.model.dto.RequestPixLinkPagamentoDTO;
 import com.breno.materabootcamp.banco.model.dto.RequestPixDTO;
 import com.breno.materabootcamp.banco.model.dto.ResponsePixDTO;
@@ -63,7 +64,13 @@ public class ContaController {
     	return ResponseEntity.status(HttpStatus.OK).body(responsePixDTO);
     }
     
-    @GetMapping("/lancamentos/pix/{chavePix}/{valor}")
+    @PostMapping("/lancamentos/pix/pagamento")
+    public ResponseEntity<ResponsePixDTO> pix(@RequestBody RequenstPagarPixLinkDTO pixPagamentoDTO) throws ContaSemSaldoException {
+    	ResponsePixDTO responsePixDTO = contaService.pagarLinkPagamento(pixPagamentoDTO);
+    	return ResponseEntity.status(HttpStatus.OK).body(responsePixDTO);
+    }
+    
+    @GetMapping("/lancamentos/pix/pagamento/{chavePix}/{valor}")
     public ResponseEntity<PesponsePixLinkPagamentoDTO> pixPagamento(@PathVariable String chavePix, @PathVariable BigDecimal valor) throws ContaInvalidaException {
     	RequestPixLinkPagamentoDTO requestlinkPixPagamentoDTO = new RequestPixLinkPagamentoDTO(chavePix, valor);
     	PesponsePixLinkPagamentoDTO responselinkPixDTO = contaService.gerarLinkPagamento(requestlinkPixPagamentoDTO);
