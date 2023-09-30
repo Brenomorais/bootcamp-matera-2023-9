@@ -12,6 +12,8 @@
 * banco: simula api de um banco qualquer. Cria conta, faz debito,credito e pix entre contas.
 * bacen: simula api de integração do bacen.
 
-*** Java 17
-*** Spring Boot
-*** Docjer
+### Stack
+
+- Java 17
+- Spring Boot
+- Docker
