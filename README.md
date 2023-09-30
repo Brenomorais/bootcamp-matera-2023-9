@@ -7,4 +7,7 @@
 * revisao_java: Revisão geral sobre Java e POO.
 * gerenciadorDeCarros: Projeto do material de apoio.
 
-### banco: API do Banco
+### projeto-pix: 
+
+* banco: simula api de um banco qualquer. Cria conta, faz debito,credito e pix entre contas.
+* bacen: simula api de integração do bacen.
