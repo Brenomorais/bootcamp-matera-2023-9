@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+  bacen:
+    build: ./bacen/
+    image: bacen-api
+    container_name: bacen-api    
+    ports:
+      - "8081:8081"
+  banco:
+    build: ./banco/
+    image: banco-api   
+    container_name: banco-api
+    depends_on:
+      - bacen
+    ports:
+      - "8080:8080"

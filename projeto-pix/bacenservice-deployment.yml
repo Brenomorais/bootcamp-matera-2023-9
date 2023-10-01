@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: bacenservice-deployment
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: bacenservice
+ template:
+  metadata:
+   labels:
+    app: bacenservice
+  spec:
+   containers:
+    - name: bacenservice
+      image: bacenservice:1.0
+      imagePullPolicy: Never
+      ports:
+      - containerPort: 8081

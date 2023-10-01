@@ -1,0 +1,21 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: bancoservice-deployment
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: bancoservice
+ template:
+  metadata:
+   labels:
+    app: bancoservice
+  spec:
+   containers:
+    - name: bancoservice
+      image: bancoservice:1.0
+      imagePullPolicy: Never
+      ports:
+      - containerPort: 8080

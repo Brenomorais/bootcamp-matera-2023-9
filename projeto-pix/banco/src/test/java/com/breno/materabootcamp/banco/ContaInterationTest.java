@@ -55,9 +55,15 @@ public class ContaInterationTest {
 
 	@BeforeAll
 	static void startWireMock() {
+		//lê do  src/test/resources/application.propperties
 		wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().port(8081));
 
 		wireMockServer.start();
+		
+		wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo("/contas"))
+				.willReturn(aResponse().withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
+						.withStatus(HttpStatus.CREATED.value())
+						.withBody("Run WireMockServer.")));
 
 		wireMockServer.stubFor(WireMock.post(WireMock.urlEqualTo("/contas"))
 				.willReturn(aResponse().withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
@@ -67,7 +73,6 @@ public class ContaInterationTest {
 								+ "    \"agencia\": \"111\",\r\n"
 								+ "    \"chavePix\": \"11111111111\"\r\n"
 								+ "}")));
-
 	}
 	
 	@AfterAll
