@@ -17,3 +17,5 @@
 - Java 17
 - Spring Boot
 - Docker
+- Docker Compose
+- Kubernetes (Minikube)
