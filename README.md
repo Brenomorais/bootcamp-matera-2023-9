@@ -1,7 +1,7 @@
 # Matera Bootcamp 2023/9:
 Estudo realizado durante o curso de API Rest da matera. Durante  o curso foi realizado revisões de conceitos e tecnologias, o curso teve como projeto principal a criação microsevições de Internet Banking transações de PIX e integrações.
 
-Após finalização do curso inclui novas funcionalidades para fixação do conhecimento, também fiz a conteinerização dos serviços com Docer e orquestração dos serviços com Kubernetes.
+Após finalização do curso inclui novas funcionalidades para fixação do conhecimento, também fiz a conteinerização dos serviços com Docker e orquestração dos serviços com Kubernetes.
 
 ## Conteúdos:
 
