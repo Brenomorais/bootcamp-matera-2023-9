@@ -3,6 +3,7 @@ package com.breno.materabootcamp.banco.controller;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,6 +29,7 @@ import com.breno.materabootcamp.banco.model.dto.RequestPixLinkPagamentoDTO;
 import com.breno.materabootcamp.banco.model.dto.ResponsePixDTO;
 import com.breno.materabootcamp.banco.service.BancoService;
 import com.breno.materabootcamp.banco.service.ContaService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -133,7 +136,7 @@ public class ContaController {
     }
 
     /**
-     * PUT (atualiza de maneira integral): atualiza conta cadastrada
+     * PUT (atualiza de maneira integral a entidade caso não exista cria, o recomendado é cirar no post)
      * PATH: atualiza de maneira parcial entidade
      * http://localhost:8080/contas/1
      * @param id
@@ -144,12 +147,33 @@ public class ContaController {
     public ResponseEntity<Conta> autalizar(@PathVariable Long id, @RequestBody  ContaRequestDTO contaRequest) {
         Optional<Conta> contaOptional = contaService.buscaPorId(id);
         if (contaOptional.isPresent()) {
-            Conta contaAtualizada = contaService.criarOuAutalizar(contaRequest);
+        	Conta contaExistente = contaOptional.get();        	
+            Conta contaAtualizada = contaService.atualizar(contaRequest,contaExistente);
+            
+            //Conta contaAtualizada = contaService.criarOuAutalizar(contaRequest,contaExistente);
             return ResponseEntity.ok(contaAtualizada);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    /**
+     * PATCH: atualiza apenas a situação da conta, mas pode atualizar outra campos vier no request
+     * 
+     * @param id
+     * @param camposAtualizados
+     * @return
+     * @throws JsonProcessingException
+     */
+    @PatchMapping("/{id}")
+    public ResponseEntity<Conta> atualizarParcialmenteConta(@PathVariable Long id, @RequestBody Map<String, Object> camposAtualizados) {
+        Conta contaAtualizado = contaService.atualizarParcialmenteConta(id, camposAtualizados);
+        if (contaAtualizado != null) {
+            return ResponseEntity.ok(contaAtualizado);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }    
     
     /**
      * URL: http://localhost:8080/contas/criarConta

@@ -38,6 +38,8 @@ public class Conta {
     
     @ManyToOne
     private Banco banco;
+    
+    private Boolean situacao = true;
    
     public Conta(){
     }
