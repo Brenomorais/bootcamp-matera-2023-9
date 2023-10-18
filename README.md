@@ -7,11 +7,11 @@ Após finalização do curso inclui novas funcionalidades para fixação do conh
 
 * Revisão de Java e Programação Orientada a Objetos.
 * Ecossistema Spring
-* API Rest
+* API REST e Spring
 * Spring Data JPA
 * Criação microserviço Conta
 * Criação microserviço Bacen
-* Integração entre microserviço
+* Integração dos microserviços
 * Thread e Transações 
 
 ## Projetos:
